@@ -16,7 +16,7 @@
 
 package com.google.gson;
 
-import com.google.gson.internal.$Gson$Preconditions;
+import com.google.gson.internal.GsonPreconditions;
 import com.google.gson.internal.Streams;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -120,7 +120,7 @@ final class TreeTypeAdapter<T> extends TypeAdapter<T> {
       deserializer = typeAdapter instanceof JsonDeserializer
           ? (JsonDeserializer<?>) typeAdapter
           : null;
-      $Gson$Preconditions.checkArgument(serializer != null || deserializer != null);
+      GsonPreconditions.checkArgument(serializer != null || deserializer != null);
       this.exactType = exactType;
       this.matchRawType = matchRawType;
       this.hierarchyType = hierarchyType;

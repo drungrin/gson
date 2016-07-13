@@ -22,7 +22,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.internal.$Gson$Types;
+import com.google.gson.internal.GsonTypes;
 import com.google.gson.internal.ConstructorConstructor;
 import com.google.gson.internal.Excluder;
 import com.google.gson.internal.ObjectConstructor;
@@ -114,7 +114,7 @@ public final class ReflectiveTypeAdapterFactory implements TypeAdapterFactory {
           continue;
         }
         field.setAccessible(true);
-        Type fieldType = $Gson$Types.resolve(type.getType(), raw, field.getGenericType());
+        Type fieldType = GsonTypes.resolve(type.getType(), raw, field.getGenericType());
         BoundField boundField = createBoundField(context, field, getFieldName(field),
             TypeToken.get(fieldType), serialize, deserialize);
         BoundField previous = result.put(boundField.name, boundField);
@@ -123,7 +123,7 @@ public final class ReflectiveTypeAdapterFactory implements TypeAdapterFactory {
               + " declares multiple JSON fields named " + previous.name);
         }
       }
-      type = TypeToken.get($Gson$Types.resolve(type.getType(), raw, raw.getGenericSuperclass()));
+      type = TypeToken.get(GsonTypes.resolve(type.getType(), raw, raw.getGenericSuperclass()));
       raw = type.getRawType();
     }
     return result;

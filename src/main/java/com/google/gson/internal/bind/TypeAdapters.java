@@ -58,7 +58,7 @@ public final class TypeAdapters {
   private TypeAdapters() {}
 
   @SuppressWarnings("rawtypes")
-  public static final TypeAdapter<Class> CLASS = new TypeAdapter<Class>() {
+  public static final TypeAdapter<Class> CLASS_ADAPTER = new TypeAdapter<Class>() {
     @Override
     public void write(JsonWriter out, Class value) throws IOException {
       if (value == null) {
@@ -79,7 +79,7 @@ public final class TypeAdapters {
       }
     }
   };
-  public static final TypeAdapterFactory CLASS_FACTORY = newFactory(Class.class, CLASS);
+  public static final TypeAdapterFactory CLASS_FACTORY = newFactory(Class.class, CLASS_ADAPTER);
 
   public static final TypeAdapter<BitSet> BIT_SET = new TypeAdapter<BitSet>() {
     public BitSet read(JsonReader in) throws IOException {
@@ -380,7 +380,7 @@ public final class TypeAdapters {
       out.value(value);
     }
   };
-  
+  public static final TypeAdapterFactory BIG_DECIMAL_FACTORY = newFactory(BigDecimal.class, BIG_DECIMAL);
   public static final TypeAdapter<BigInteger> BIG_INTEGER = new TypeAdapter<BigInteger>() {
     @Override public BigInteger read(JsonReader in) throws IOException {
       if (in.peek() == JsonToken.NULL) {
@@ -398,7 +398,7 @@ public final class TypeAdapters {
       out.value(value);
     }
   };
-
+  public static final TypeAdapterFactory BIG_INTEGER_FACTORY = newFactory(BigInteger.class, BIG_INTEGER);
   public static final TypeAdapterFactory STRING_FACTORY = newFactory(String.class, STRING);
 
   public static final TypeAdapter<StringBuilder> STRING_BUILDER = new TypeAdapter<StringBuilder>() {
@@ -748,7 +748,7 @@ public final class TypeAdapters {
 
   public static final TypeAdapterFactory ENUM_FACTORY = newEnumTypeHierarchyFactory();
 
-  public static TypeAdapterFactory newEnumTypeHierarchyFactory() {
+  private static TypeAdapterFactory newEnumTypeHierarchyFactory() {
     return new TypeAdapterFactory() {
       @SuppressWarnings({"rawtypes", "unchecked"})
       public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
@@ -760,16 +760,6 @@ public final class TypeAdapters {
           rawType = rawType.getSuperclass(); // handle anonymous subclasses
         }
         return (TypeAdapter<T>) new EnumTypeAdapter(rawType);
-      }
-    };
-  }
-
-  public static <TT> TypeAdapterFactory newFactory(
-      final TypeToken<TT> type, final TypeAdapter<TT> typeAdapter) {
-    return new TypeAdapterFactory() {
-      @SuppressWarnings("unchecked") // we use a runtime check to make sure the 'T's equal
-      public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
-        return typeToken.equals(type) ? (TypeAdapter<T>) typeAdapter : null;
       }
     };
   }
@@ -802,7 +792,7 @@ public final class TypeAdapters {
     };
   }
 
-  public static <TT> TypeAdapterFactory newFactoryForMultipleTypes(final Class<TT> base,
+  private static <TT> TypeAdapterFactory newFactoryForMultipleTypes(final Class<TT> base,
       final Class<? extends TT> sub, final TypeAdapter<? super TT> typeAdapter) {
     return new TypeAdapterFactory() {
       @SuppressWarnings("unchecked") // we use a runtime check to make sure the 'T's equal
@@ -813,6 +803,16 @@ public final class TypeAdapters {
       @Override public String toString() {
         return "Factory[type=" + base.getName()
             + "+" + sub.getName() + ",adapter=" + typeAdapter + "]";
+      }
+    };
+  }
+
+  public static <TT> TypeAdapterFactory newFactory(
+      final TypeToken<TT> type, final TypeAdapter<TT> typeAdapter) {
+    return new TypeAdapterFactory() {
+      @SuppressWarnings("unchecked") // we use a runtime check to make sure the 'T's equal
+      public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
+        return typeToken.equals(type) ? (TypeAdapter<T>) typeAdapter : null;
       }
     };
   }

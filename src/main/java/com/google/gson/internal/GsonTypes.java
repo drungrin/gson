@@ -16,8 +16,8 @@
 
 package com.google.gson.internal;
 
-import static com.google.gson.internal.$Gson$Preconditions.checkArgument;
-import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
+import static com.google.gson.internal.GsonPreconditions.checkArgument;
+import static com.google.gson.internal.GsonPreconditions.checkNotNull;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -39,10 +39,10 @@ import java.util.Properties;
  * @author Bob Lee
  * @author Jesse Wilson
  */
-public final class $Gson$Types {
+public final class GsonTypes {
   static final Type[] EMPTY_TYPE_ARRAY = new Type[] {};
 
-  private $Gson$Types() {}
+  private GsonTypes() {}
 
   /**
    * Returns a new parameterized type, applying {@code typeArguments} to
@@ -266,7 +266,7 @@ public final class $Gson$Types {
   static Type getSupertype(Type context, Class<?> contextRawType, Class<?> supertype) {
     checkArgument(supertype.isAssignableFrom(contextRawType));
     return resolve(context, contextRawType,
-        $Gson$Types.getGenericSupertype(context, contextRawType, supertype));
+                   GsonTypes.getGenericSupertype(context, contextRawType, supertype));
   }
 
   /**
@@ -468,7 +468,7 @@ public final class $Gson$Types {
 
     @Override public boolean equals(Object other) {
       return other instanceof ParameterizedType
-          && $Gson$Types.equals(this, (ParameterizedType) other);
+             && GsonTypes.equals(this, (ParameterizedType) other);
     }
 
     @Override public int hashCode() {
@@ -508,7 +508,7 @@ public final class $Gson$Types {
 
     @Override public boolean equals(Object o) {
       return o instanceof GenericArrayType
-          && $Gson$Types.equals(this, (GenericArrayType) o);
+             && GsonTypes.equals(this, (GenericArrayType) o);
     }
 
     @Override public int hashCode() {
@@ -560,7 +560,7 @@ public final class $Gson$Types {
 
     @Override public boolean equals(Object other) {
       return other instanceof WildcardType
-          && $Gson$Types.equals(this, (WildcardType) other);
+             && GsonTypes.equals(this, (WildcardType) other);
     }
 
     @Override public int hashCode() {
